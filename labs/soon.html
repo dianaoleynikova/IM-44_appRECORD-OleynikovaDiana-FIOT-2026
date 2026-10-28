@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Звіт. Лабораторна робота</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Times New Roman", Times, serif;
+        color: #000;
+        background: #fff;
+        margin: 0 auto;
+        max-width: 1040px;
+        padding: 18px 20px 40px;
+      }
+
+      /* ---------- шапка ---------- */
+      .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .titles {
+        flex: 1;
+        text-align: center;
+      }
+      .titles h1 {
+        font-size: 16px;
+        line-height: 1.35;
+        margin: 6px 0 14px;
+        font-weight: bold;
+      }
+      .titles p {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .photo {
+        width: 100px;
+        height: 125px;
+        border: 1px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 13px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* ---------- кнопки лабораторних ---------- */
+      .labs {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 8px;
+        margin: 14px 0 18px;
+      }
+      .labs button {
+        font:
+          13px/1.2 "Times New Roman",
+          Times,
+          serif;
+        text-align: left;
+        border: 1px solid #000;
+        border-radius: 12px;
+        background: #fff;
+        color: #000;
+        padding: 8px 7px;
+        min-height: 54px;
+        cursor: pointer;
+      }
+      .labs button.active {
+        background: #ffeb00;
+      }
+      .labs button:hover:not(.active),
+      .pill:hover:not(.active) {
+        background: #efefef;
+      }
+
+      /* ---------- меню + область виведення ---------- */
+      .layout {
+        display: flex;
+        gap: 22px;
+        align-items: flex-start;
+      }
+      .menu {
+        width: 290px;
+        flex-shrink: 0;
+      }
+      .pill {
+        display: block;
+        width: 100%;
+        border: 1px solid #000;
+        border-radius: 30px;
+        background: #fff;
+        color: #000;
+        padding: 11px 20px;
+        margin: 0 0 14px;
+        text-align: left;
+        font:
+          bold 14px/1.25 "Times New Roman",
+          Times,
+          serif;
+        cursor: pointer;
+      }
+      .pill.sub {
+        width: calc(100% - 64px);
+        margin: 0 0 10px 64px;
+        padding: 9px 12px;
+        text-align: center;
+        font:
+          bold 12px/1.2 Arial,
+          Helvetica,
+          sans-serif;
+      }
+      .pill.active {
+        background: #fff6a0;
+      }
+
+      .out {
+        flex: 1;
+        min-width: 0;
+        height: 600px;
+        overflow: auto;
+        border: 1px solid #000;
+        padding: 14px 22px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .out h2 {
+        margin: 0 0 12px;
+        font-size: 19px;
+        text-align: center;
+      }
+      .out h3 {
+        font-size: 16px;
+        margin: 18px 0 6px;
+      }
+      .out p {
+        margin: 6px 0;
+      }
+      .out ul,
+      .out ol {
+        margin: 6px 0;
+      }
+      .out pre {
+        background: #f6f6f6;
+        border: 1px solid #c8c8c8;
+        padding: 10px;
+        overflow-x: auto;
+        font-size: 12.5px;
+        line-height: 1.4;
+        margin: 8px 0;
+      }
+      .out code {
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.92em;
+      }
+      .out img.shot {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #999;
+        margin: 8px 0;
+      }
+      .out table.theory {
+        border-collapse: collapse;
+        margin: 10px 0;
+        width: 100%;
+        font-size: 14px;
+      }
+      .out table.theory th,
+      .out table.theory td {
+        border: 1px solid #777;
+        padding: 4px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .out table.theory th {
+        background: #eef2f8;
+      }
+      .out .soon {
+        text-align: center;
+        color: #555;
+        margin-top: 90px;
+        font-size: 17px;
+      }
+
+      /* ---------- контрольні питання, література ---------- */
+      .bottom h2 {
+        text-align: center;
+        font-size: 16px;
+        margin: 44px 0 12px;
+      }
+      .bottom ol.q {
+        width: max-content;
+        max-width: 100%;
+        margin: 0 auto 8px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .bottom h2.lit {
+        font-size: 22px;
+        margin: 26px 0 14px;
+      }
+      .bottom ol.lit {
+        font-size: 15px;
+        padding-left: 36px;
+      }
+      .bottom ol.lit li {
+        margin-bottom: 16px;
+      }
+      a {
+        color: #0000ee;
+        word-break: break-word;
+      }
+
+      @media (max-width: 860px) {
+        .labs {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .layout {
+          flex-direction: column;
+        }
+        .menu {
+          width: 100%;
+        }
+        .out {
+          width: 100%;
+          height: auto;
+          min-height: 420px;
+        }
+        .head {
+          flex-direction: column-reverse;
+          align-items: center;
+        }
+      }
+    /* ---------- ЛР №2: приклади з живим результатом ---------- */
+.ex { margin: 10px 0 18px; }
+.ex .cap { margin: 8px 0 3px; font-weight: bold; font-size: 14px; }
+.ex pre { margin: 0; }
+iframe.live { display: block; width: 100%; height: 120px; border: 1px solid #888; background: #fff; }
+    /* ---------- ЛР №3 ---------- */
+.out .shots { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.out .shots img.shot { max-width: 48%; }
+    
+      /* ---------- сторінка однієї лабораторної (показується в рамці макета) ---------- */
+      body { max-width: none; padding: 0; }
+      .out { height: auto; border: 0; overflow: visible; padding: 14px 22px 30px; }
+    </style>
+  </head>
+  <body>
+    <main class="out">
+      <p class="soon">
+        Звіт з лабораторної роботи №<span id="n"></span> буде додано після
+        виконання роботи.
+      </p>
+    </main>
+    <script>
+      document.getElementById("n").textContent = location.hash.replace("#", "") || "?";
+    </script>
+  </body>
+</html>

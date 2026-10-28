@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Звіт. Лабораторна робота №2</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Times New Roman", Times, serif;
+        color: #000;
+        background: #fff;
+        margin: 0 auto;
+        max-width: 1040px;
+        padding: 18px 20px 40px;
+      }
+
+      /* ---------- шапка ---------- */
+      .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .titles {
+        flex: 1;
+        text-align: center;
+      }
+      .titles h1 {
+        font-size: 16px;
+        line-height: 1.35;
+        margin: 6px 0 14px;
+        font-weight: bold;
+      }
+      .titles p {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .photo {
+        width: 100px;
+        height: 125px;
+        border: 1px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 13px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* ---------- кнопки лабораторних ---------- */
+      .labs {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 8px;
+        margin: 14px 0 18px;
+      }
+      .labs button {
+        font:
+          13px/1.2 "Times New Roman",
+          Times,
+          serif;
+        text-align: left;
+        border: 1px solid #000;
+        border-radius: 12px;
+        background: #fff;
+        color: #000;
+        padding: 8px 7px;
+        min-height: 54px;
+        cursor: pointer;
+      }
+      .labs button.active {
+        background: #ffeb00;
+      }
+      .labs button:hover:not(.active),
+      .pill:hover:not(.active) {
+        background: #efefef;
+      }
+
+      /* ---------- меню + область виведення ---------- */
+      .layout {
+        display: flex;
+        gap: 22px;
+        align-items: flex-start;
+      }
+      .menu {
+        width: 290px;
+        flex-shrink: 0;
+      }
+      .pill {
+        display: block;
+        width: 100%;
+        border: 1px solid #000;
+        border-radius: 30px;
+        background: #fff;
+        color: #000;
+        padding: 11px 20px;
+        margin: 0 0 14px;
+        text-align: left;
+        font:
+          bold 14px/1.25 "Times New Roman",
+          Times,
+          serif;
+        cursor: pointer;
+      }
+      .pill.sub {
+        width: calc(100% - 64px);
+        margin: 0 0 10px 64px;
+        padding: 9px 12px;
+        text-align: center;
+        font:
+          bold 12px/1.2 Arial,
+          Helvetica,
+          sans-serif;
+      }
+      .pill.active {
+        background: #fff6a0;
+      }
+
+      .out {
+        flex: 1;
+        min-width: 0;
+        height: 600px;
+        overflow: auto;
+        border: 1px solid #000;
+        padding: 14px 22px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .out h2 {
+        margin: 0 0 12px;
+        font-size: 19px;
+        text-align: center;
+      }
+      .out h3 {
+        font-size: 16px;
+        margin: 18px 0 6px;
+      }
+      .out p {
+        margin: 6px 0;
+      }
+      .out ul,
+      .out ol {
+        margin: 6px 0;
+      }
+      .out pre {
+        background: #f6f6f6;
+        border: 1px solid #c8c8c8;
+        padding: 10px;
+        overflow-x: auto;
+        font-size: 12.5px;
+        line-height: 1.4;
+        margin: 8px 0;
+      }
+      .out code {
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.92em;
+      }
+      .out img.shot {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #999;
+        margin: 8px 0;
+      }
+      .out table.theory {
+        border-collapse: collapse;
+        margin: 10px 0;
+        width: 100%;
+        font-size: 14px;
+      }
+      .out table.theory th,
+      .out table.theory td {
+        border: 1px solid #777;
+        padding: 4px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .out table.theory th {
+        background: #eef2f8;
+      }
+      .out .soon {
+        text-align: center;
+        color: #555;
+        margin-top: 90px;
+        font-size: 17px;
+      }
+
+      /* ---------- контрольні питання, література ---------- */
+      .bottom h2 {
+        text-align: center;
+        font-size: 16px;
+        margin: 44px 0 12px;
+      }
+      .bottom ol.q {
+        width: max-content;
+        max-width: 100%;
+        margin: 0 auto 8px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .bottom h2.lit {
+        font-size: 22px;
+        margin: 26px 0 14px;
+      }
+      .bottom ol.lit {
+        font-size: 15px;
+        padding-left: 36px;
+      }
+      .bottom ol.lit li {
+        margin-bottom: 16px;
+      }
+      a {
+        color: #0000ee;
+        word-break: break-word;
+      }
+
+      @media (max-width: 860px) {
+        .labs {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .layout {
+          flex-direction: column;
+        }
+        .menu {
+          width: 100%;
+        }
+        .out {
+          width: 100%;
+          height: auto;
+          min-height: 420px;
+        }
+        .head {
+          flex-direction: column-reverse;
+          align-items: center;
+        }
+      }
+    /* ---------- ЛР №2: приклади з живим результатом ---------- */
+.ex { margin: 10px 0 18px; }
+.ex .cap { margin: 8px 0 3px; font-weight: bold; font-size: 14px; }
+.ex pre { margin: 0; }
+iframe.live { display: block; width: 100%; height: 120px; border: 1px solid #888; background: #fff; }
+    /* ---------- ЛР №3 ---------- */
+.out .shots { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.out .shots img.shot { max-width: 48%; }
+    
+      /* ---------- сторінка однієї лабораторної (показується в рамці макета) ---------- */
+      body { max-width: none; padding: 0; }
+      .out { height: auto; border: 0; overflow: visible; padding: 14px 22px 30px; }
+    </style>
+  </head>
+  <body>
+    <main class="out" id="out">
+<section class="part" id="p-l2-tema" hidden>
+<h2>Тема, мета ЛР №2. Місце розташування сайту, звіту</h2>
+<h3>Тема ЛР №2</h3>
+<p>Каскадні таблиці стилів. Селектори тегу, класу, ідентифікатора. Стильове оформлення текстових елементів в HTML-документах.</p>
+<h3>Мета ЛР №2</h3>
+<p>Придбати практичні навички роботи з селекторами, ідентифікаторами, списками, різноманітними властивостями кольору і фону, зовнішніми та внутрішніми відступами, плаваючими елементами, оформленням текстових елементів.</p>
+<h3>Власний WEB-застосунок</h3>
+<p>TaskTracker. Стилі винесено у зовнішній файл <code>css/style.css</code>, який підключається в <code>index.html</code>.</p>
+<h3>Місце розташування</h3>
+<ul>
+<li>Репозиторій власного WEB-застосунку:<br><a href="https://github.com/dianaoleynikova/IM-44_appWEB-OleynikovaDiana-FIOT-2026" target="_blank" rel="noopener">https://github.com/dianaoleynikova/IM-44_appWEB-OleynikovaDiana-FIOT-2026</a></li>
+<li>Жива сторінка власного WEB-застосунку:<br><a href="https://dianaoleynikova.github.io/IM-44_appWEB-OleynikovaDiana-FIOT-2026/" target="_blank" rel="noopener">https://dianaoleynikova.github.io/IM-44_appWEB-OleynikovaDiana-FIOT-2026/</a></li>
+<li>Репозиторій звітного HTML-документа:<br><a href="https://github.com/dianaoleynikova/IM-44_appRECORD-OleynikovaDiana-FIOT-2026" target="_blank" rel="noopener">https://github.com/dianaoleynikova/IM-44_appRECORD-OleynikovaDiana-FIOT-2026</a></li>
+<li>Жива сторінка звітного HTML-документа:<br><a href="https://dianaoleynikova.github.io/IM-44_appRECORD-OleynikovaDiana-FIOT-2026/" target="_blank" rel="noopener">https://dianaoleynikova.github.io/IM-44_appRECORD-OleynikovaDiana-FIOT-2026/</a></li>
+</ul>
+</section>
+<section class="part" id="p-l2-styles" hidden>
+<h2>Способи підключення стилів</h2>
+<p>Існують три способи задати стилі HTML-елементам:</p>
+<ol>
+<li><strong>Вбудований (inline)</strong> — атрибут <code>style</code> в тезі елемента. Діє лише на цей елемент.</li>
+<li><strong>Внутрішній (internal)</strong> — елемент <code>&lt;style&gt;</code> в розділі <code>&lt;head&gt;</code>. Діє на всю сторінку.</li>
+<li><strong>Зовнішній (external)</strong> — окремий файл <code>.css</code>, який підключається елементом <code>&lt;link rel="stylesheet" href="..."&gt;</code>. Один файл можна підключити до багатьох сторінок.</li>
+</ol>
+<h3>1. Вбудований стиль</h3>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;p style="color: #b91c1c; font-weight: bold;"&gt;Дедлайн сьогодні!&lt;/p&gt;</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>2. Внутрішній стиль</h3>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;head&gt;
+  &lt;style&gt;
+    h2 { color: #1e3a8a; border-bottom: 2px solid #2563eb; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;h2&gt;Завдання проєкту&lt;/h2&gt;
+&lt;p&gt;Заголовок оформлено стилем із елемента style.&lt;/p&gt;</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>3. Зовнішній стиль</h3>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;head&gt;
+  &lt;link rel="stylesheet" href="css/style.css"&gt;
+&lt;/head&gt;
+&lt;h2&gt;Завдання проєкту&lt;/h2&gt;
+&lt;p&gt;Стилі підключено з файлу css/style.css.&lt;/p&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>h2 { color: #1e3a8a; border-bottom: 2px solid #2563eb; }
+p  { color: #475569; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Як це зроблено в TaskTracker</h3>
+<p>У <code>index.html</code> використано всі три способи: атрибут <code>style</code> (банер і обгортки таблиці), елемент <code>&lt;style&gt;</code> (кольори посилань, зроблені в ЛР №1) і зовнішній файл (основні стилі). Зовнішній файл підключено <em>після</em> <code>&lt;style&gt;</code>, тому при однаковій специфічності його правила виграють.</p>
+<pre><code>&lt;link rel="icon" type="image/svg+xml" href="images/logo.svg"&gt;
+&lt;style&gt; ... &lt;/style&gt;
+&lt;link rel="stylesheet" href="css/style.css"&gt;</code></pre>
+<h3>Каскадування і спадкування</h3>
+<ul>
+<li><strong>Каскадування</strong> — правила розв’язання конфліктів, коли кілька правил стосуються одного елемента: перемагає правило з вищою специфічністю (вбудований стиль, потім <code>#id</code>, потім клас / атрибут / псевдоклас, потім тег), а за рівної специфічності — те, що записане пізніше.</li>
+<li><strong>Спадкування</strong> — передача деяких властивостей (<code>color</code>, <code>font-family</code>, <code>line-height</code>, <code>text-align</code>) від батьківського елемента до вкладених. Властивості рамок, відступів і фону не успадковуються.</li>
+</ul>
+</section>
+<section class="part" id="p-l2-selectors" hidden>
+<h2>СЕЛЕКТОРИ</h2>
+<p>Селектор визначає, до яких елементів застосовується правило <code>селектор { властивість: значення; }</code>.</p>
+<table class="theory">
+<tr><th>Селектор</th><th>Приклад</th><th>Вибирає</th></tr>
+<tr><td>тегу</td><td><code>p</code></td><td>усі елементи <code>&lt;p&gt;</code></td></tr>
+<tr><td>групи</td><td><code>h1, h2, h3</code></td><td>елементи кількох типів одразу</td></tr>
+<tr><td>класу</td><td><code>.status</code></td><td>елементи з <code>class="status"</code></td></tr>
+<tr><td>ідентифікатора</td><td><code>#top</code></td><td>єдиний елемент з <code>id="top"</code></td></tr>
+<tr><td>нащадка</td><td><code>#top a</code></td><td>усі посилання всередині <code>#top</code></td></tr>
+<tr><td>дочірній</td><td><code>section &gt; h2</code></td><td>заголовки h2, що є прямими дітьми section</td></tr>
+<tr><td>сусідній</td><td><code>h3 + ol</code></td><td>список, що йде одразу після h3</td></tr>
+<tr><td>атрибута</td><td><code>input[required]</code></td><td>елементи із заданим атрибутом чи значенням</td></tr>
+<tr><td>універсальний</td><td><code>*</code></td><td>усі елементи</td></tr>
+<tr><td>псевдоклас, псевдоелемент</td><td><code>a:hover</code>, <code>a::after</code></td><td>стан елемента або його частина</td></tr>
+</table>
+<h3>Специфічність</h3>
+<p>Від найвищої до найнижчої: вбудований <code>style</code> → <code>#id</code> → <code>.клас</code>, <code>[атрибут]</code>, <code>:псевдоклас</code> → <code>тег</code>, <code>::псевдоелемент</code> → <code>*</code>. Наприклад, у TaskTracker правило <code>#top h1 { color: #fff; }</code> перемагає <code>h1 { color: #2563eb; }</code>.</p>
+<p>Приклади кожного виду селекторів — у наступних пунктах меню.</p>
+</section>
+<section class="part" id="p-l2-tag" hidden>
+<h2>Селектори тегу</h2>
+<p>Селектор тегу застосовує правило до всіх елементів цього типу. Селектор групи <code>h1, h2, h3</code> об’єднує кілька тегів в одне правило.</p>
+<p>У <code>css/style.css</code> стилі тегів задано для <code>body</code>, <code>h1</code>–<code>h3</code>, <code>p</code>, <code>img</code>, <code>a</code>.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;h1&gt;TaskTracker&lt;/h1&gt;
+&lt;h2&gt;Завдання проєкту&lt;/h2&gt;
+&lt;h3&gt;Дошка завдань&lt;/h3&gt;
+&lt;p&gt;Трекер завдань для команди: плануйте, призначайте виконавців, відстежуйте статус.&lt;/p&gt;
+&lt;p&gt;&lt;a href="#"&gt;Перейти до завдань&lt;/a&gt;&lt;/p&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>body { color: #1f2937; background-color: #f5f7fb; max-width: 960px; margin: 0 auto; padding: 0 16px 40px; }
+h1 { color: #2563eb; font-size: 36px; margin: 8px 0; }
+h2 { color: #1e3a8a; border-bottom: 2px solid #2563eb; padding-bottom: 4px; }
+h3 { color: #1d4ed8; }
+p  { margin: 8px 0; }
+img { border-radius: 12px; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+</section>
+<section class="part" id="p-l2-class" hidden>
+<h2>Селектори класу</h2>
+<p>Клас задають атрибутом <code>class</code> в HTML, а в CSS — крапкою перед іменем: <code>.status</code>. Один клас можна використати для багатьох елементів, а елемент може мати кілька класів (<code>class="status status-done"</code>).</p>
+<p>У таблиці завдань TaskTracker класи задають колір пріоритету (<code>.priority-high</code>, <code>.priority-mid</code>, <code>.priority-low</code>) і вигляд статусу (<code>.status</code> та <code>.status-done</code>, <code>.status-work</code>, <code>.status-review</code>, <code>.status-todo</code>).</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;table&gt;
+  &lt;tr&gt;&lt;th&gt;Завдання&lt;/th&gt;&lt;th&gt;Пріоритет&lt;/th&gt;&lt;th&gt;Статус&lt;/th&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Розробити макет&lt;/td&gt;&lt;td class="priority-high"&gt;Високий&lt;/td&gt;&lt;td class="status status-done"&gt;Виконано&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Зверстати сторінку&lt;/td&gt;&lt;td class="priority-mid"&gt;Середній&lt;/td&gt;&lt;td class="status status-work"&gt;В роботі&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Налаштувати БД&lt;/td&gt;&lt;td class="priority-high"&gt;Високий&lt;/td&gt;&lt;td class="status status-review"&gt;На перевірці&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Написати документацію&lt;/td&gt;&lt;td class="priority-low"&gt;Низький&lt;/td&gt;&lt;td class="status status-todo"&gt;До виконання&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>table { border-collapse: collapse; }
+th, td { border: 1px solid #cbd5e1; padding: 6px 10px; }
+
+.priority-high { color: #b91c1c; font-weight: bold; }
+.priority-mid  { color: #b45309; }
+.priority-low  { color: #15803d; }
+.status { text-align: center; font-weight: bold; }
+.status-done   { background-color: #dcfce7; color: #166534; }
+.status-work   { background-color: #fef3c7; color: #92400e; }
+.status-review { background-color: #dbeafe; color: #1e40af; }
+.status-todo   { background-color: #e5e7eb; color: #374151; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+</section>
+<section class="part" id="p-l2-id" hidden>
+<h2>Селектори ідентифікаторів</h2>
+<p>Ідентифікатор (<code>id</code>) унікальний у межах сторінки й позначає один конкретний елемент. У CSS перед іменем ставлять решітку: <code>#top</code>. Ідентифікатор також використовується як закладка для посилань (<code>href="#top"</code>).</p>
+<p>У TaskTracker стилями за ідентифікаторами оформлено шапку <code>#top</code>, таблицю <code>#task-table</code> і розділ <code>#new-task</code>.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;header id="top"&gt;
+  &lt;h1&gt;TaskTracker&lt;/h1&gt;
+  &lt;p&gt;Плануйте. Призначайте. Відстежуйте.&lt;/p&gt;
+  &lt;nav&gt;&lt;a href="#"&gt;Завдання&lt;/a&gt; | &lt;a href="#"&gt;Про сервіс&lt;/a&gt;&lt;/nav&gt;
+&lt;/header&gt;
+&lt;section id="new-task"&gt;
+  &lt;h2&gt;Нове завдання&lt;/h2&gt;
+  &lt;p&gt;Тут розміщується форма створення завдання.&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>#top { color: #fff; background-color: #1e3a8a; }
+#top { text-align: center; padding: 20px 12px; border-radius: 0 0 16px 16px; }
+#top h1 { color: #fff; }
+#top a:link, #top a:visited { color: #bfdbfe; }
+#new-task { background-color: #fff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 4px 16px 16px; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+</section>
+<section class="part" id="p-l2-other" hidden>
+<h2>Інші селектори</h2>
+<h3>Дочірній селектор <code>&gt;</code></h3>
+<p>Вибирає лише прямі дочірні елементи: вкладений заголовок не змінюється.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;section&gt;
+  &lt;h2&gt;Дочірній заголовок&lt;/h2&gt;
+  &lt;div&gt;
+    &lt;h2&gt;Вкладений заголовок&lt;/h2&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>section &gt; h2 { margin-top: 28px; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Сусідній селектор <code>+</code></h3>
+<p>Вибирає елемент, що йде безпосередньо після іншого: оформлено лише перший список після заголовка та опис після терміна.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;h3&gt;Життєвий цикл&lt;/h3&gt;
+&lt;ol&gt;&lt;li&gt;Створення&lt;/li&gt;&lt;li&gt;Виконання&lt;/li&gt;&lt;/ol&gt;
+&lt;ol&gt;&lt;li&gt;Другий список (не сусід заголовка)&lt;/li&gt;&lt;/ol&gt;
+&lt;dl&gt;&lt;dt&gt;Дедлайн&lt;/dt&gt;&lt;dd&gt;Крайній термін виконання.&lt;/dd&gt;&lt;/dl&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>:root { --accent: #2563eb; }
+h3 + ol, h3 + ul { background-color: #fff; border-left: 4px solid var(--accent); padding: 8px 8px 8px 36px; }
+dt + dd { margin-left: 24px; color: #475569; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Селектор атрибута</h3>
+<p>Вибирає елементи за атрибутом або його значенням: поля певного типу, обов’язкові поля, посилання, що відкриваються в новій вкладці.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;p&gt;&lt;input type="text" placeholder="Назва" required&gt;
+   &lt;input type="email" placeholder="E-mail"&gt;
+   &lt;input type="submit" value="Створити"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://example.com" target="_blank"&gt;Репозиторій&lt;/a&gt;
+   &lt;a href="https://example.com"&gt;Звичайне посилання&lt;/a&gt;&lt;/p&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>input[type="text"], input[type="email"], input[type="number"], input[type="date"], select, textarea {
+  border: 1px solid #94a3b8; border-radius: 6px; padding: 5px 8px;
+}
+input[required] { border-left: 4px solid #dc2626; }
+a[target="_blank"]::after { content: " ↗"; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Універсальний селектор <code>*</code></h3>
+<p>Вибирає всі елементи. У TaskTracker він задає <code>box-sizing: border-box</code> для всіх елементів, а також контур при фокусі (<code>*:focus</code>). Для наочності нижче контур показано для всіх елементів.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;h2&gt;Заголовок&lt;/h2&gt;
+&lt;p&gt;Абзац із &lt;em&gt;виділенням&lt;/em&gt;.&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Елемент списку&lt;/li&gt;&lt;/ul&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>* { outline: 1px dashed #f59e0b; }   /* для наочності */</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+</section>
+<section class="part" id="p-l2-css" hidden>
+<h2>CSS: Шрифти Текст Таблиці Фон Контур Списки CSS Просунутий</h2>
+<h3>Шрифти</h3>
+<p><code>font-family</code> — гарнітура (із запасними варіантами), <code>font-size</code> — розмір, <code>font-weight</code> — товщина, <code>font-style</code> — нахил.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;h2&gt;Завдання проєкту&lt;/h2&gt;
+&lt;p&gt;Звичайний текст абзацу.&lt;/p&gt;
+&lt;p&gt;Властивість &lt;code&gt;font-family&lt;/code&gt; задає гарнітуру.&lt;/p&gt;
+&lt;dl&gt;&lt;dt&gt;Статус&lt;/dt&gt;&lt;dd&gt;Поточний етап виконання завдання.&lt;/dd&gt;&lt;/dl&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>body { font-family: Arial, Helvetica, sans-serif; font-size: 16px; }
+h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: bold; }
+dt { font-style: italic; font-weight: bold; }
+code { font-family: Consolas, "Courier New", monospace; background-color: #e2e8f0; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Текст і колір тексту</h3>
+<p><code>color</code>, <code>text-align</code>, <code>text-transform</code>, <code>letter-spacing</code>, <code>line-height</code>, <code>text-decoration</code>.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;header id="top"&gt;
+  &lt;p&gt;Трекер завдань&lt;/p&gt;
+&lt;/header&gt;
+&lt;p&gt;Абзац із &lt;a href="#"&gt;посиланням без підкреслення&lt;/a&gt;: підкреслення з’являється при наведенні курсора.&lt;/p&gt;
+&lt;footer&gt;© 2026 TaskTracker&lt;/footer&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>#top { color: #1e3a8a; text-align: center; }
+
+body { line-height: 1.6; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+#top p { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+footer { text-align: center; color: #475569; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Таблиці</h3>
+<p><code>border-collapse</code>, <code>padding</code>, <code>border</code>, <code>caption-side</code>, смугасті рядки (<code>:nth-child(even)</code>) та підсвічування рядка при наведенні (<code>:hover</code>).</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;table id="task-table"&gt;
+  &lt;caption&gt;Список завдань&lt;/caption&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Завдання&lt;/th&gt;&lt;th&gt;Виконавець&lt;/th&gt;&lt;th&gt;Статус&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Розробити макет&lt;/td&gt;&lt;td&gt;Діана О.&lt;/td&gt;&lt;td&gt;Виконано&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Зверстати сторінку&lt;/td&gt;&lt;td&gt;Діана О.&lt;/td&gt;&lt;td&gt;В роботі&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Налаштувати БД&lt;/td&gt;&lt;td&gt;Максим Д.&lt;/td&gt;&lt;td&gt;На перевірці&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;&lt;tr&gt;&lt;td colspan="3"&gt;Усього завдань: 3&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>:root { --accent: #2563eb; }
+#task-table { width: 100%; border-collapse: collapse; }
+#task-table caption { caption-side: top; font-weight: bold; padding: 6px; }
+#task-table th, #task-table td { padding: 8px 10px; border: 1px solid #cbd5e1; }
+#task-table th { background-color: var(--accent); color: #fff; text-align: left; }
+#task-table tbody tr:nth-child(even) { background-color: #f1f5f9; }
+#task-table tbody tr:hover { background-color: #fff3bf; }
+#task-table tfoot td { font-style: italic; text-align: right; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Фон</h3>
+<p><code>background-color</code>, <code>background-image</code> (у тому числі градієнт <code>linear-gradient</code>), <code>background-repeat</code>, <code>background-position</code>.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;header id="top"&gt;
+  &lt;h1&gt;TaskTracker&lt;/h1&gt;
+&lt;/header&gt;
+&lt;p&gt;Основний вміст сторінки.&lt;/p&gt;
+&lt;footer&gt;&lt;p&gt;© 2026 TaskTracker&lt;/p&gt;&lt;/footer&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>#top { text-align: center; padding: 12px; }
+
+#top {
+  color: #fff;
+  background-color: #1e3a8a;
+  background-image: linear-gradient(135deg, #1e3a8a, #7c3aed);
+}
+footer { background-color: #e2e8f0; border-radius: 12px; margin-top: 24px; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Контур</h3>
+<p><code>border</code> (рамка), <code>border-radius</code> (заокруглення), <code>outline</code> (контур поза рамкою, не займає місця), <code>box-shadow</code> (тінь).</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;form action="#"&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Створення завдання&lt;/legend&gt;
+    &lt;p&gt;&lt;input type="text" placeholder="Назва"&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;button type="button"&gt;Створити&lt;/button&gt;&lt;/p&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>:root { --accent: #2563eb; --accent-dark: #1d4ed8; }
+
+fieldset { border: 2px solid #93c5fd; border-radius: 10px; }
+input, select, textarea { outline: 2px solid #dbeafe; outline-offset: 1px; }
+button {
+  color: #fff; background-color: var(--accent); border: 1px solid var(--accent-dark);
+  border-radius: 6px; padding: 6px 14px; box-shadow: 0 2px 6px rgba(37, 99, 235, .35);
+}</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Списки, у тому числі багаторівневі</h3>
+<p><code>list-style-type</code> для кожного рівня вкладеності (<code>ul</code>, <code>ul ul</code>, <code>ul ul ul</code>), а псевдоелемент <code>::marker</code> змінює вигляд маркера.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;ul&gt;
+  &lt;li&gt;Керування завданнями
+    &lt;ul&gt;
+      &lt;li&gt;створення та редагування&lt;/li&gt;
+      &lt;li&gt;призначення виконавця
+        &lt;ul&gt;
+          &lt;li&gt;за ролями&lt;/li&gt;
+          &lt;li&gt;за навичками&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Сповіщення&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>ul { list-style-type: square; }
+ul ul { list-style-type: circle; }
+ul ul ul { list-style-type: disc; }
+li::marker { color: var(--accent); font-weight: bold; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>Зовнішні та внутрішні відступи, плаваючі елементи</h3>
+<p><code>margin</code> — зовнішній відступ, <code>padding</code> — внутрішній, <code>float</code> — виводить блок з обтіканням текстом.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;h3&gt;Дошка завдань&lt;/h3&gt;
+&lt;div class="badge"&gt;В роботі&lt;/div&gt;
+&lt;p&gt;Блок зі статусом плаває праворуч, а текст обтікає його. Зовнішній відступ margin відсуває блок від тексту, внутрішній padding віддаляє напис від меж блока. Колонки дошки показують завдання за статусами: до виконання, в роботі, виконано.&lt;/p&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>.badge {
+  float: right;
+  margin: 0 0 8px 16px;     /* зовнішні відступи */
+  padding: 8px 14px;        /* внутрішні відступи */
+  background-color: #fef3c7;
+  color: #92400e;
+  border-radius: 8px;
+}</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+<h3>CSS Просунутий</h3>
+<p>Змінні CSS (<code>--accent</code> і <code>var(--accent)</code>), псевдокласи (<code>:hover</code>, <code>:focus</code>, <code>:nth-child()</code>), псевдоелементи (<code>::after</code>, <code>::marker</code>), плавні переходи (<code>transition</code>), медіазапити (<code>@media</code>) для адаптивності. Наведи курсор на кнопки, щоб побачити перехід кольору.</p>
+<div class="ex">
+<p class="cap">HTML-код</p>
+<pre data-code="html"><code>&lt;p&gt;&lt;button type="button"&gt;Створити&lt;/button&gt; &lt;button type="button"&gt;Очистити&lt;/button&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Перший елемент&lt;/li&gt;
+  &lt;li&gt;Другий елемент&lt;/li&gt;
+  &lt;li&gt;Третій елемент&lt;/li&gt;
+  &lt;li&gt;Четвертий елемент&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://example.com" target="_blank"&gt;Репозиторій&lt;/a&gt;&lt;/p&gt;</code></pre>
+<p class="cap">CSS-код</p>
+<pre data-code="css"><code>:root { --accent: #2563eb; --accent-dark: #1d4ed8; }
+
+button { color: #fff; background-color: var(--accent); border: 1px solid var(--accent-dark); border-radius: 6px; padding: 6px 14px; }
+button { cursor: pointer; transition: background-color .2s; }
+button:hover { background-color: var(--accent-dark); }
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  h1 { font-size: 28px; }
+}
+li:nth-child(odd) { background-color: #eff6ff; }
+a[target="_blank"]::after { content: " ↗"; }</code></pre>
+<p class="cap">Результат у браузері</p>
+<iframe class="live" title="Результат у браузері"></iframe>
+</div>
+</section>
+<section class="part" id="p-l2-concl" hidden>
+<h2>ВИСНОВКИ до ЛР №2</h2>
+<p>У ході лабораторної роботи №2 було підключено до WEB-застосунку TaskTracker зовнішню таблицю стилів <code>css/style.css</code> і розглянуто три способи підключення стилів: вбудований, внутрішній та зовнішній.</p>
+<p>Практично застосовано селектори тегу, групи, класу, ідентифікатора, а також дочірній, сусідній, атрибута й універсальний селектори. З’ясовано відмінність між каскадуванням (розв’язання конфліктів за специфічністю й порядком) та спадкуванням (передача властивостей від батьківських елементів).</p>
+<p>Виконано стильове оформлення шрифтів, тексту, таблиць, фону, контурів і списків (зокрема багаторівневих), використано зовнішні та внутрішні відступи, плаваючі елементи, змінні CSS, псевдокласи, переходи та медіазапити. Результати лабораторних робіт №1 і №2 відображено у звітному HTML-документі.</p>
+</section>
+    </main>
+    <script src="lab.js"></script>
+  </body>
+</html>
